@@ -1,0 +1,258 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Modulo Gestion Ordenes</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Ordenes</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-money-bill-wave"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Monto Ventas</span>
+                        <span class="info-box-number">{{totalMonto}}<small> (Bs.)</small></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Ventas Aprobadas</span>
+                        <span class="info-box-number">{{totalVentasAprobadas}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up"></div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-down"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Ventas Rechazadas</span>
+                        <span class="info-box-number">{{totalVentasRechazadas}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Pedidos</span>
+                        <span class="info-box-number">{{totalPedidos}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <!-- Custom Tabs -->
+                <div class="card">
+                    <div class="card-header d-flex p-0">
+                        <h3 class="card-title p-3">Ordenes Realizadas</h3>
+                        <ul class="nav nav-pills ml-auto p-2">
+                            <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Pendientes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Aprobadas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Reprobadas</a></li>
+                        </ul>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <div *ngIf="!listOrdenesPendientes.length">
+                                    <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Pendientes...</h3>
+                                </div>
+
+                                <div class="row" style="display: flex;">
+                                    <div *ngFor="let itemPadre of listOrdenesPendientes;" class="col-xl-3 col-sm-4 col-lg-3 col-12">
+                                        <div class="cardCarCustom  border-danger mb-3">
+                                            <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
+                                                <h6 style="margin-bottom:4px;">{{itemPadre.nombrePersona}}</h6>
+                                            </div>
+                                            <hr style="margin: 0;padding: 0;">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.fecha | date:'dd/MM/YYYY hh:mm:ss'}}</span> Fecha
+                                                </li>
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.nroPedido}}</span> Nº Orden
+                                                </li>
+                                            </ul>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+
+                                                    <div *ngFor="let itemHijo of itemPadre.productos" class="info-box bg-light">
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-number text-center text-muted mb-0">{{itemHijo.nombreProducto}}</span>
+                                                            <hr style="margin: 0;padding: 0;">
+                                                            <span class="info-box-text text-muted">Cantida: {{itemHijo.cantidad}}</span>
+                                                            <span class="info-box-text text-muted">Sub Total: {{itemHijo.subTotal}} (Bs.)</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <hr style="margin: 0;padding: 0;">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.montoTotal}} (Bs)</span>
+                                                    <i class="fas fa-money-bill-wave"></i> Monto Total a Cobrar
+                                                </li>
+                                            </ul>
+                                            <div class="row mt-2">
+                                                <div class="col-6">
+                                                    <button type="button" (click)="Aprobar(itemPadre.idPedido)" class="btn btn-block btn-outline-warning btn-xs">
+                                                            <i class="fas fa-thumbs-up"></i>
+                                                        </button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button type="button" (click)="Rechazar(itemPadre.idPedido)" class="btn btn-block btn-outline-danger btn-xs">
+                                                            <i class="fas fa-thumbs-down"></i>
+                                                        </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div *ngIf="!listOrdenesAprobadas.length">
+                                    <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Aprobadas...</h3>
+                                </div>
+                                <div class="row" style="display: flex;">
+                                    <div *ngFor="let itemPadre of listOrdenesAprobadas;" class="col-xl-3 col-sm-3 col-lg-3 col-12">
+                                        <div class="cardCarCustom  border-danger mb-3">
+                                            <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
+                                                <h6 style="margin-bottom:4px;">{{itemPadre.nombrePersona}}</h6>
+                                            </div>
+                                            <hr style="margin: 0;padding: 0;">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.fecha | date:'dd/MM/YYYY hh:mm:ss'}}</span> Fecha
+                                                </li>
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.nroPedido}}</span> Nº Orden
+                                                </li>
+                                            </ul>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+
+                                                    <div *ngFor="let itemHijo of itemPadre.productos" class="info-box bg-light">
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-number text-center text-muted mb-0">{{itemHijo.nombreProducto}}</span>
+                                                            <hr style="margin: 0;padding: 0;">
+                                                            <span class="info-box-text text-muted">Cantida: {{itemHijo.cantidad}}</span>
+                                                            <span class="info-box-text text-muted">Sub Total: {{itemHijo.subTotal}} (Bs.)</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <hr style="margin: 0;padding: 0;">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.montoTotal}} (Bs)</span>
+                                                    <i class="fas fa-money-bill-wave"></i> Monto Total Cobrado
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_3">
+                                <div *ngIf="!listOrdenesRechazadas.length">
+                                    <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Rechazados...</h3>
+                                </div>
+                                <div class="row" style="display: flex;">
+                                    <div *ngFor="let itemPadre of listOrdenesRechazadas;" class="col-xl-3 col-sm-3 col-lg-3 col-12">
+                                        <div class="cardCarCustom  border-danger mb-3">
+                                            <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
+                                                <h6 style="margin-bottom:4px;">{{itemPadre.nombrePersona}}</h6>
+                                            </div>
+                                            <hr style="margin: 0;padding: 0;">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.fecha | date:'dd/MM/YYYY hh:mm:ss'}}</span> Fecha
+                                                </li>
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.nroPedido}}</span> Nº Orden
+                                                </li>
+                                            </ul>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+
+                                                    <div *ngFor="let itemHijo of itemPadre.productos" class="info-box bg-light">
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-number text-center text-muted mb-0">{{itemHijo.nombreProducto}}</span>
+                                                            <hr style="margin: 0;padding: 0;">
+                                                            <span class="info-box-text text-muted">Cantida: {{itemHijo.cantidad}}</span>
+                                                            <span class="info-box-text text-muted">Sub Total: {{itemHijo.subTotal}} (Bs.)</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- ./card -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+
+
+    </div>
+    <!--/. container-fluid -->
+</section>
+<!-- /.content -->

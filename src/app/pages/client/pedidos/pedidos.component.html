@@ -1,0 +1,128 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Compra tu producto</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Productos</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-4">
+                <!-- general form elements -->
+                <div class="card ">
+                    <div class="card-header">
+                        <h3 class="card-title">Buscar Producto</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="input-group input-group-sm">
+                            <input type="text" [(ngModel)]="textoBuscar" placeholder="Buscar Producto..." class="form-control">
+                            <span class="input-group-append">
+                                  <button type="button" (click)="buscarProducto()" class="btn btn-danger btn-flat">Buscar</button>
+                                </span>
+                        </div>
+
+                        <div *ngIf="!listProductos.length">
+                            <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;"><i class="fa fa-search"></i> Buscar Productos...</h3>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-xl-12 col-sm-6 col-lg-4 col-12" *ngFor="let item of listProductos;let i=index;">
+                                <!-- small box -->
+                                <div class="small-box bg-danger">
+                                    <div class="inner">
+                                        <h3>{{item.precioVenta}} Bs.</h3>
+                                        <p>{{item.nombre}}</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-money-bill-wave"></i>
+                                    </div>
+                                    <a class="small-box-footer" (click)="agregarCarrito(item,i)">Agregar al carrito <i class="fas fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!--/.col (left) -->
+            <!-- right column -->
+            <div class="col-md-8">
+                <!-- general form elements disabled -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fa fa-cart-plus"></i> Carrito</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div *ngIf="!listCarrito.length">
+                            <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;"><i class="fa fa-cart-plus"></i> Sus productos comprados se visualizaran en este lugar...</h3>
+                        </div>
+                        <div class="row" *ngIf="listCarrito.length" style="display: flex;">
+                            <div *ngFor="let item of listCarrito;let i=index" class="col-xl-4 col-sm-6 col-lg-4 col-12">
+                                <div class="cardCarCustom  border-danger mb-3">
+                                    <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
+                                        <h6 style="margin-bottom:4px;">{{item.nombre}}</h6>
+                                    </div>
+                                    <hr style="margin: 0;padding: 0;">
+                                    <ul class="list-group list-group-flush mt-2">
+                                        <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                            <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.cantidad}}</span>
+                                            <i class="fa fa-asterisk"></i> Cantidad
+                                        </li>
+                                        <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                            <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.subTotal}} Bs</span>
+                                            <i class="fa fa-asterisk"></i> Sub-Total
+                                        </li>
+                                    </ul>
+                                    <div class="footer mt-2 mb-2">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <button type="button" (click)="agregarCarrito(item,i)" class="btn btn-block btn-outline-warning btn-xs">
+                                                    <i class="fa fa-plus"></i> </button>
+                                            </div>
+                                            <div class="col-6">
+                                                <button type="button" (click)="quitar(i)" class="btn btn-block btn-outline-danger btn-xs">
+                                                    <i class="fa fa-minus"></i> 
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" (click)="eliminar(i)" class="btn btn-block btn-outline-danger btn-xs">
+                                        <i class="fa fa-trash-alt"></i> Eliminar Producto
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-danger btn-block btn-sm" (click)="Ordenar()"><i class="fa fa-money-bill-wave"></i> Ordenar</button>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!--/. container-fluid -->
+</section>
+<!-- /.content -->

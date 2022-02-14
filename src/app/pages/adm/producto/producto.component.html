@@ -1,0 +1,110 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Modulo Producto</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Producto</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Lista de Productos</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <button class="btn btn-block btn-outline-danger btn-sm mb-3" data-toggle="modal" data-target="#modal-default" (click)="limpiarCampos()"><i class="fa fa-plus"></i> Nuevo Registro</button>
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                    <!-- <table id="example1" class="table table-bordered table-striped"> -->
+                    <thead>
+                        <tr>
+                            <th style="width: 5px;">#</th>
+                            <th>Nombre</th>
+                            <th>Precio Entrega</th>
+                            <th>Precio Venta</th>
+                            <th>Stock</th>
+                            <th>Peso</th>
+                            <th>Proveedor</th>
+                            <th style="width: 20px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listProductos;let i=index;">
+                            <td>{{i+1}}</td>
+                            <td>{{ item.nombre }}</td>
+                            <td>{{ item.precioEntrega }}</td>
+                            <td>{{ item.precioVenta }}</td>
+                            <td>{{ item.stock }}</td>
+                            <td>{{ item.peso }}</td>
+                            <td>{{ item.proveedor.nombre }}</td>
+                            <td>
+                                <button class="btn btn-xs btn-outline-warning mr-1" data-toggle="modal" data-target="#modal-default" (click)="modificar(item)"><i class="fas fa-pencil-alt"></i></button>
+                                <button class="btn btn-xs btn-outline-danger" (click)="eliminar(item.idProducto)"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </div>
+    <!--/. container-fluid -->
+</section>
+<!-- /.content -->
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="nav-icon fas fa-file-signature"></i> {{titleModal}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="Form">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" formControlName="nombre" class="form-control" placeholder="Nombre">
+                        <label>Precio Entrega</label>
+                        <input type="number" formControlName="precioEntrega" class="form-control" placeholder="Precio Entrega">
+                        <label>Precio Venta</label>
+                        <input type="number" formControlName="precioVenta" class="form-control" placeholder="Precio Venta">
+                        <label>Stock</label>
+                        <input type="number" formControlName="stock" class="form-control" placeholder="Stock">
+                        <label>Peso</label>
+                        <input type="number" formControlName="peso" class="form-control" placeholder="Peso">
+                        <label>Proveedor</label>
+                        <select formControlName="idProveedor" class="form-control select2" placeholder="Proveedor" style="width: 100%;">
+                          <option *ngFor="let item of listProveedor;" value="{{item.idProveedor}}">{{item.nombre}}</option>        
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+                <button type="button" (click)="save()" [disabled]="!Form.valid" class="btn btn-outline-danger btn-sm"><i class="fa fa-save mr-1"></i> Gurdar</button>
+            </div>
+        </div>
+    </div>
+</div>

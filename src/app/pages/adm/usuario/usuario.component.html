@@ -1,0 +1,111 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Modulo Usuario</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Usuario</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Lista de Usuarios</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <button class="btn btn-block btn-outline-danger btn-sm mb-3" data-toggle="modal" data-target="#modal-default" (click)="limpiarCampos()"><i class="fa fa-plus"></i> Nuevo Registro</button>
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                    <!-- <table id="example1" class="table table-bordered table-striped"> -->
+                    <thead>
+                        <tr>
+                            <th style="width: 5px;">#</th>
+                            <th>Persona</th>
+                            <th>Usuario</th>
+                            <th>Sucursal</th>
+                            <th>Tipo</th>
+                            <th style="width: 20px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listUsuarios;let i=index;">
+                            <td>{{i+1}}</td>
+                            <td>{{ item.persona.nombres }} {{ item.persona.apellidos }}</td>
+                            <td>{{ item.claveUs }}</td>
+                            <td>{{ item.sucursal.nombre }}</td>
+                            <td>{{ item.tipo.rol }}</td>
+                            <td>
+                                <button class="btn btn-xs btn-outline-warning mr-1" data-toggle="modal" data-target="#modal-default" (click)="modificar(item)"><i class="fas fa-pencil-alt"></i></button>
+                                <button class="btn btn-xs btn-outline-danger" (click)="eliminar(item.idUsuario)"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </div>
+    <!--/. container-fluid -->
+</section>
+<!-- /.content -->
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="nav-icon fas fa-users"></i> {{titleModal}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="Form">
+                    <div class="form-group">
+                        <label>Usuario</label>
+                        <input type="text" formControlName="claveUs" class="form-control" placeholder="Usuario">
+                        <label>Contraseña</label>
+                        <input type="password" formControlName="passwordUs" class="form-control" placeholder="Password">
+
+                        <label>Persona</label>
+                        <select formControlName="idPersona" class="form-control select2" style="width: 100%;">
+                          <option *ngFor="let item of listPersona;" value="{{item.idPersona}}">{{item.ci}} // {{item.nombres}} {{item.apellidos}}</option>        
+                        </select>
+
+                        <label>Sucursal</label>
+                        <select formControlName="idSucursal" class="form-control select2" style="width: 100%;">
+                            <option *ngFor="let item of listSucursal;" value="{{item.idSucursal}}">{{item.nombre}}</option>        
+                        </select>
+
+                        <label>TipoUsuario</label>
+                        <select formControlName="idTipo" class="form-control select2" style="width: 100%;">
+                            <option *ngFor="let item of listTipoUsuario;" value="{{item.idTipo}}">{{item.rol}}</option>        
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+                <button type="button" (click)="save()" [disabled]="!Form.valid" class="btn btn-outline-danger btn-sm"><i class="fa fa-save mr-1"></i> Gurdar</button>
+            </div>
+        </div>
+    </div>
+</div>

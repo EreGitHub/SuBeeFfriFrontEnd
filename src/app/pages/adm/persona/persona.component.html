@@ -1,0 +1,109 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"><i class="fa fa-user"></i> Modulo Persona</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Persona</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card card-solid">
+        <div class="card-body pb-0">
+            <button class="btn btn-block btn-outline-danger btn-sm mb-3" data-toggle="modal" data-target="#modal-default" (click)="limpiarCampos()"><i class="fa fa-plus"></i> Nuevo Registro</button>
+            <div class="row d-flex align-items-stretch">
+                <div *ngFor="let item of listPersonas" class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                    <div class="card bg-light">
+                        <div class="card-header text-muted border-bottom-0">
+                            Digital Strategist
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="row">
+                                <div class="col-7">
+                                    <h2 class="lead"><b>{{item.nombres}}</b></h2>
+                                    <p class="text-muted text-sm"><b>Apellido: </b> {{item.apellidos}} </p>
+                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                                        <li class="small mb-2"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Dirección: {{item.direccion}}</li>
+                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-user"></i></span> Ci: {{item.ci}}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-5 text-center">
+                                    <img src="{{item.foto}}" alt="" class="img-circle img-fluid">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="text-right">
+                                <button class="btn btn-sm btn-outline-warning mr-1" data-toggle="modal" data-target="#modal-default" (click)="modificar(item)"><i class="fas fa-pencil-alt"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" (click)="eliminar(item.idPersona)"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-user"></i> {{titleModal}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="Form">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Nombres</label>
+                        <input type="text" formControlName="nombres" class="form-control" placeholder="Nombres">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Apellidos</label>
+                        <input type="text" formControlName="apellidos" class="form-control" placeholder="Apellidos">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Ci</label>
+                        <input type="text" formControlName="ci" class="form-control" placeholder="Ci">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Dirección</label>
+                        <input type="text" formControlName="direccion" class="form-control" placeholder="Dirección">
+                    </div>
+                    <div *ngIf="previsualizacion" style="background-color: aqua;text-align: center;">
+                        <img src="{{previsualizacion}}" height="200px" alt="">
+                    </div>
+                    <input type="file" (change)="file($event)" class="form-control">
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+                <button type="button" (click)="save()" [disabled]="!Form.valid" class="btn btn-outline-danger btn-sm"><i class="fa fa-save mr-1"></i> Gurdar</button>
+            </div>
+        </div>
+    </div>
+</div>

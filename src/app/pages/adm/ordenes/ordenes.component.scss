@@ -1,0 +1,31 @@
+a {
+    cursor: pointer;
+}
+
+.cardCarCustom {
+    width: auto;
+    height: auto;
+    border-radius: 1px;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin-bottom: 20px;
+    /*text-align: center;*/
+    transition: all 0.25s;
+    padding: 1rem;
+    border-radius: 2px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.cardCarCustom:hover {
+    /*transform: translateY(-5px);*/
+    box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    color: #ffffff;
+    background-color: #dc3545;
+}
+
+// #343a40;

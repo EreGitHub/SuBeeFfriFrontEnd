@@ -1,0 +1,41 @@
+<div class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <h3 class="text-muted">Carnes SuBeeFFri</h3>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <img src="assets/img/LogoSuBeeFfri2.jpeg" class="logo" alt="Logo Receta Digital">
+                <p class="login-box-msg">Ingresa tus credenciales para iniciar sesion</p>
+                <form [formGroup]="loginForm" (ngSubmit)="login()">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" formControlName="usuario" placeholder="Usuario">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" formControlName="password" placeholder="Contraseña">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- /.col -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-outline-danger btn-block" [disabled]="!loginForm.valid"><i class="fa fa-sign-in-alt"></i> Inicia Sesion</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+</div>

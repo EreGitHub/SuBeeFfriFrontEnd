@@ -6,6 +6,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
+import { PdfMakeWrapper } from 'pdfmake-wrapper';
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+
+// Set the fonts to use
+PdfMakeWrapper.setFonts(pdfFonts);
+
 import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [

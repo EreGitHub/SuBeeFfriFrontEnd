@@ -90,7 +90,8 @@
                         <ul class="nav nav-pills ml-auto p-2">
                             <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Pendientes</a></li>
                             <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Aprobadas</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Reprobadas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Cobradas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Rechazados</a></li>
                         </ul>
                     </div>
                     <!-- /.card-header -->
@@ -155,13 +156,58 @@
                                 </div>
 
                             </div>
-                            <!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_2">
                                 <div *ngIf="!listOrdenesAprobadas.length">
                                     <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Aprobadas...</h3>
                                 </div>
                                 <div class="row" style="display: flex;">
                                     <div *ngFor="let itemPadre of listOrdenesAprobadas;" class="col-xl-3 col-sm-3 col-lg-3 col-12">
+                                        <div class="cardCarCustom  border-danger mb-3">
+                                            <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
+                                                <h6 style="margin-bottom:4px;">{{itemPadre.nombrePersona}}</h6>
+                                            </div>
+                                            <hr style="margin: 0;padding: 0;">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.fecha | date:'dd/MM/YYYY hh:mm:ss'}}</span> Fecha
+                                                </li>
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.nroPedido}}</span> Nº Orden
+                                                </li>
+                                            </ul>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+
+                                                    <div *ngFor="let itemHijo of itemPadre.productos" class="info-box bg-light">
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-number text-center text-muted mb-0">{{itemHijo.nombreProducto}}</span>
+                                                            <hr style="margin: 0;padding: 0;">
+                                                            <span class="info-box-text text-muted">Cantida: {{itemHijo.cantidad}}</span>
+                                                            <span class="info-box-text text-muted">Sub Total: {{itemHijo.subTotal}} (Bs.)</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <hr style="margin: 0;padding: 0;">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.montoTotal}} (Bs)</span>
+                                                    <i class="fas fa-money-bill-wave"></i> Monto Total a Cobrar
+                                                </li>
+                                            </ul>
+                                            <button class="btn btn-xs btn-block btn-outline-danger"><i class="fa fa-money-bill-wave"></i> Cobrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab_3">
+                                <div *ngIf="!listOrdenesCobradas.length">
+                                    <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Aprobadas...</h3>
+                                </div>
+                                <div class="row" style="display: flex;">
+                                    <div *ngFor="let itemPadre of listOrdenesCobradas;" class="col-xl-3 col-sm-3 col-lg-3 col-12">
                                         <div class="cardCarCustom  border-danger mb-3">
                                             <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
                                                 <h6 style="margin-bottom:4px;">{{itemPadre.nombrePersona}}</h6>
@@ -201,8 +247,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.tab-pane -->
-                            <div class="tab-pane" id="tab_3">
+                            <div class="tab-pane" id="tab_4">
                                 <div *ngIf="!listOrdenesRechazadas.length">
                                     <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Rechazados...</h3>
                                 </div>
@@ -239,7 +284,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.tab-pane -->
                         </div>
                         <!-- /.tab-content -->
                     </div>

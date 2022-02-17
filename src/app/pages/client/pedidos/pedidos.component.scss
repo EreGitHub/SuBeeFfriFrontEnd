@@ -21,3 +21,14 @@ a {
     /*transform: translateY(-5px);*/
     box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
 }
+
+div.scrollProduct {
+    height: 400px;
+    overflow: scroll;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    color: #ffffff;
+    background-color: #dc3545;
+}

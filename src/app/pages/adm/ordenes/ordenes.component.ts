@@ -18,6 +18,7 @@ export class OrdenesComponent implements OnInit {
   listOrdenesPendientes: Array<any> = [];
   listOrdenesAprobadas: Array<any> = [];
   listOrdenesRechazadas: Array<any> = [];
+  listOrdenesCobradas: Array<any> = [];
   constructor(
     private server: ServerService,
     private toastr: ToastrService) { }
@@ -49,9 +50,6 @@ export class OrdenesComponent implements OnInit {
 
   async Listar() {
     const lst = await this.server.get('/OrdenPedido/ListarOrdenes') as any;
-    lst.forEach((row: any) => {
-      this.totalMonto += row.montoTotal;
-    });
 
     this.listOrdenesPendientes = [];
     this.listOrdenesAprobadas = [];
@@ -62,6 +60,10 @@ export class OrdenesComponent implements OnInit {
     this.listOrdenesAprobadas = lst.filter((row: any) => row.estadoOrden == 'Aprobado');
     this.totalVentasAprobadas = this.listOrdenesAprobadas.length;
     this.listOrdenesRechazadas = lst.filter((row: any) => row.estadoOrden == 'Rechazado');
+    this.listOrdenesCobradas = lst.filter((row: any) => row.estadoOrden == 'Cobrado');
+    this.listOrdenesCobradas.forEach((row: any) => {
+      this.totalMonto += row.montoTotal;
+    });
     this.totalVentasRechazadas = this.listOrdenesRechazadas.length;
   }
 

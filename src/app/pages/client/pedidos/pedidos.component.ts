@@ -11,13 +11,18 @@ export class PedidosComponent implements OnInit {
 
   listProductos: Array<any> = [];
   listCarrito: Array<any> = [];
+  listEstadoProductos: Array<any> = [];
   textoBuscar: string = '';
   constructor(
     private server: ServerService,
     private toastr: ToastrService) { }
 
   async ngOnInit() {
-
+    const userLocal = localStorage.getItem('usuario') as any;
+    const user = JSON.parse(userLocal);
+    this.listProductos = await this.server.get('/Producto') as any;
+    this.listEstadoProductos = await this.server.get('/OrdenPedido/ListarOrdenesPorUsuario/' + user.idUsuario) as any;
+    console.log(this.listEstadoProductos);
   }
 
   async buscarProducto() {

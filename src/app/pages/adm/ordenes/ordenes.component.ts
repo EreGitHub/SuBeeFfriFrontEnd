@@ -61,6 +61,7 @@ export class OrdenesComponent implements OnInit {
     this.totalVentasAprobadas = this.listOrdenesAprobadas.length;
     this.listOrdenesRechazadas = lst.filter((row: any) => row.estadoOrden == 'Rechazado');
     this.listOrdenesCobradas = lst.filter((row: any) => row.estadoOrden == 'Cobrado');
+    this.totalMonto = 0;
     this.listOrdenesCobradas.forEach((row: any) => {
       this.totalMonto += row.montoTotal;
     });
@@ -84,6 +85,18 @@ export class OrdenesComponent implements OnInit {
       await this.Listar();
     } catch (error: any) {
       this.toastr.error(error.error);
+    }
+  }
+
+  async Cobrar(item: any) {
+    try {
+      const oUser = localStorage.getItem('usuario') as any;
+      const oUserJson = JSON.parse(oUser);
+      await this.server.post(`/OrdenPedido/Cobrar?idPedido=${item.idPedido}&idUsuarioCobrador=${oUserJson.idUsuario}`, {});
+      this.toastr.success('Orden Cobrada correctamente', 'Exitoso');
+      await this.Listar();
+    } catch (error) {
+      this.toastr.error('Ocurio un error', 'Error');
     }
   }
 

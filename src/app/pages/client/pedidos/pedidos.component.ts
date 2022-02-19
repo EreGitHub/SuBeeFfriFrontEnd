@@ -18,11 +18,39 @@ export class PedidosComponent implements OnInit {
     private toastr: ToastrService) { }
 
   async ngOnInit() {
+    await this.ListarProducto();
+  }
+
+  async ListarProducto() {
     const userLocal = localStorage.getItem('usuario') as any;
     const user = JSON.parse(userLocal);
-    this.listProductos = await this.server.get('/Producto') as any;
-    this.listEstadoProductos = await this.server.get('/OrdenPedido/ListarOrdenesPorUsuario/' + user.idUsuario) as any;
-    console.log(this.listEstadoProductos);
+    const data = await this.server.get('/Producto/All') as any;
+    this.listProductos = data.map((producto: any) => {
+      return {
+        idProducto: producto.idProducto,
+        nombre: producto.nombre,
+        fechaRegistro: producto.fechaRegistro,
+        precioEntrega: producto.precioEntrega,
+        precioVenta: producto.precioVenta,
+        stock: producto.stock,
+        peso: producto.peso,
+        direccionFoto: (producto.direccionFoto == null) ? 'assets/img/ProductoDefault.png' : producto.direccionFoto,
+      }
+    });
+    const dataProductoHistorico = await this.server.get('/OrdenPedido/ListarOrdenesPorUsuario/' + user.idUsuario) as any;
+    this.listEstadoProductos = dataProductoHistorico.map((producto: any) => {
+      return {
+        idPerdido: producto.idPerdido,
+        nombreProducto: producto.nombreProducto,
+        nombreSucursal: producto.nombreSucursal,
+        numeroPedido: producto.numeroPedido,
+        fecha: producto.fecha,
+        cantidad: producto.cantidad,
+        estado: producto.estado,
+        subTotal: producto.subTotal,
+        direccionFoto: (producto.direccionFoto == null) ? 'assets/img/ProductoDefault.png' : producto.direccionFoto,
+      }
+    });
   }
 
   async buscarProducto() {
@@ -31,7 +59,7 @@ export class PedidosComponent implements OnInit {
       return;
     }
     try {
-      this.listProductos = await this.server.get('/Producto/' + this.textoBuscar) as any;
+      this.listProductos = await this.server.get('/Producto/BuscarProducto/' + this.textoBuscar) as any;
     } catch (error: any) {
       this.toastr.error(error.error);
       this.listProductos = [];
@@ -48,7 +76,8 @@ export class PedidosComponent implements OnInit {
         nombre: item.nombre,
         precioVenta: item.precioVenta,
         cantidad: 1,
-        subTotal: item.precioVenta * 1
+        subTotal: item.precioVenta * 1,
+        direccionFoto: item.direccionFoto
       };
       this.listCarrito.push(obj);
     }
@@ -59,7 +88,8 @@ export class PedidosComponent implements OnInit {
         nombre: item.nombre,
         precioVenta: item.precioVenta,
         cantidad: cantidad,
-        subTotal: item.precioVenta * cantidad
+        subTotal: item.precioVenta * cantidad,
+        direccionFoto: item.direccionFoto
       };
       this.listCarrito[index] = obj;
     }
@@ -86,7 +116,7 @@ export class PedidosComponent implements OnInit {
     this.listCarrito.splice(index, 1);
   }
 
-  Ordenar() {
+  async Ordenar() {
     try {
       const userLocal = localStorage.getItem('usuario') as any;
       const user = JSON.parse(userLocal);
@@ -99,10 +129,10 @@ export class PedidosComponent implements OnInit {
       this.listCarrito = [];
       this.listProductos = [];
       this.textoBuscar = '';
+      await this.ListarProducto();
     } catch (error: any) {
       console.log(error);
-      this.toastr.error(`${error.error}
-      Ocurrio un error al intentar realizar la orden`, 'Error');
+      this.toastr.error(`${error.error} Ocurrio un error al intentar realizar la orden`, 'Error');
     }
   }
 

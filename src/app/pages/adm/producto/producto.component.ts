@@ -19,6 +19,9 @@ export class ProductoComponent implements AfterViewInit, OnInit {
   titleModal: string = 'Nuevo Producto';
   listProductos: Array<any> = [];
   listProveedor: Array<any> = [];
+  previsualizacion: string = '';
+  archivo: any;
+  productSeleccionado: any = {};
   Form: FormGroup = new FormGroup({
     idProducto: new FormControl(0),
     nombre: new FormControl('', [Validators.required]),
@@ -54,12 +57,24 @@ export class ProductoComponent implements AfterViewInit, OnInit {
   }
 
   async ListarProducto() {
-    this.listProductos = await this.server.get('/Producto') as any;
+    const data = await this.server.get('/Producto/All') as any;    
+    this.listProductos = data.map((producto: any) => {
+      return {
+        idProducto: producto.idProducto,
+        nombre: producto.nombre,
+        fechaRegistro: producto.fechaRegistro,
+        precioEntrega: producto.precioEntrega,
+        precioVenta: producto.precioVenta,
+        stock: producto.stock,
+        peso: producto.peso,
+        direccionFoto: (producto.direccionFoto == null) ? 'assets/img/ProductoDefault.png' : producto.direccionFoto,
+        proveedor: producto.proveedor
+      }
+    });
   }
 
   async ListarProveedor() {
     this.listProveedor = await this.server.get('/Proveedor') as any;
-    console.log(this.listProveedor)
   }
 
   limpiarCampos() {
@@ -75,9 +90,9 @@ export class ProductoComponent implements AfterViewInit, OnInit {
       const id = this.Form.get('idProducto')?.value === null ? 0 : this.Form.get('idProducto')?.value;
       if (id === 0) {
         this.Form.get('idProducto')?.setValue(id);
-        await this.server.post('/Producto', this.Form.value) as any;
+        await this.server.post('/Producto/Add', this.Form.value) as any;
       } else {
-        await this.server.put('/Producto/' + id, this.Form.value) as any;
+        await this.server.put('/Producto/Update/' + id, this.Form.value) as any;
       }
       this.rerender();
       this.toastr.success('El registro se guardo exitosamente', 'Éxito');
@@ -105,7 +120,7 @@ export class ProductoComponent implements AfterViewInit, OnInit {
 
   async eliminar(id: number) {
     try {
-      await this.server.delete('/Producto/' + id)
+      await this.server.delete('/Producto/Delete/' + id)
       this.toastr.success('El registro se elimino exitosamente', 'Éxito');
       this.rerender();
     } catch (error) {
@@ -122,6 +137,45 @@ export class ProductoComponent implements AfterViewInit, OnInit {
       await this.ListarProducto();
       this.dtTrigger.next();
     });
+  }
+
+  file(event: any) {
+    try {
+      const file = event.target.files[0];
+      this.archivo = file;
+      this.extraerBase64(file).then((data: any) => {
+        this.previsualizacion = data;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  extraerBase64(file: any) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  seleccionarProducto(item: any) {
+    this.productSeleccionado = item;
+  }
+
+  async guardarFoto() {
+    try {
+      const request = new FormData();
+      request.append('idProducto', this.productSeleccionado.idProducto);
+      request.append('foto', this.archivo);
+      await this.server.post('/Producto/SubirFoto', request) as any;
+      this.toastr.success('El registro se guardo exitosamente', 'Éxito');
+      document.getElementById('modal-foto')?.click();
+      this.rerender();
+    } catch (error) {
+      this.toastr.error('Ocurrio un error al guardar la foto', 'Error');
+    }
   }
 
   ngOnDestroy(): void {

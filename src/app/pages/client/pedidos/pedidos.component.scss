@@ -8,7 +8,7 @@ a {
     border-radius: 1px;
     box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     /*text-align: center;*/
     transition: all 0.25s;
     padding: 1rem;
@@ -23,7 +23,7 @@ a {
 }
 
 div.scrollProduct {
-    height: 400px;
+    height: 450px;
     overflow: scroll;
 }
 
@@ -31,4 +31,9 @@ div.scrollProduct {
 .nav-pills .show>.nav-link {
     color: #ffffff;
     background-color: #dc3545;
+}
+
+.logo {
+    margin: 1px auto;
+    display: block;
 }

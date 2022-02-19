@@ -14,6 +14,8 @@ export class HomeComponent implements OnInit {
 
   IsAdm: boolean = false;
   NombreUsuario: string = '';
+  objReporte1: any = {};
+  objReporte2: any = {};
   constructor(private router: Router, private http: HttpClient, private server: ServerService) { }
 
   ngOnInit(): void {
@@ -22,16 +24,29 @@ export class HomeComponent implements OnInit {
     this.IsAdm = oUsuario.tipo.idTipo === 1;
     this.NombreUsuario = oUsuario.persona.nombres;
   }
+
   logout() {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
 
+  async ListarReporte1() {
+    this.objReporte1 = await this.server.get('/Reporte');
+    console.log(this.objReporte1);
+  }
+  async ListarReporte2() {
+    const fecha = new Date();
+    const hoy = fecha.getDate();
+    const mesActual = fecha.getMonth() + 1;
+    const data: any = await this.server.get('/Reporte/' + mesActual);
+    this.objReporte2 = data;
+    console.log(this.objReporte2);
+  }
+
   async generarReporte1() {
     const pdf = new PdfMakeWrapper();
-    const data: any = await this.server.get('/Reporte');
     pdf.add(new Txt('INFORME, SUCURSAL QUE TIENE MAS PEDIDOS.').alignment('center').bold().fontSize(20).margin([0, 0, 0, 10]).end);
-
+    const data: any = this.objReporte1;
     pdf.add(
       new Stack([
         new Txt('Sucursal:   ' + data.nombreSucursal).fontSize(13).end,
@@ -66,16 +81,13 @@ export class HomeComponent implements OnInit {
 
   async generarReporte2() {
     const pdf = new PdfMakeWrapper();
-    const fecha = new Date();
-    const hoy = fecha.getDate();
-    const mesActual = fecha.getMonth() + 1;
-    const data: any = await this.server.get('/Reporte/' + mesActual);
+    const data: any = this.objReporte2;
     pdf.add(new Txt('INFORME, PRODUCTOS MAS VENDIDOS').alignment('center').bold().fontSize(20).margin([0, 0, 0, 10]).end);
 
     pdf.add(
       new Stack([
         new Txt('Reporte perteneciente al mes de : ' + data.mes).fontSize(13).end,
-        new Txt('Monto Total Generado:   ' + data.montoTotal+' (Bs.)').fontSize(13).end
+        new Txt('Monto Total Generado:   ' + data.montoTotal + ' (Bs.)').fontSize(13).end
       ]).margin([0, 0, 0, 20]).end
     );
 

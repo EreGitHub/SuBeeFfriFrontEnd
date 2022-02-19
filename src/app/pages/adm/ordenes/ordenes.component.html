@@ -84,20 +84,20 @@
         <div class="row">
             <div class="col-12">
                 <!-- Custom Tabs -->
-                <div class="card">
+                <div class="card card-danger card-outline">
                     <div class="card-header d-flex p-0">
                         <h3 class="card-title p-3">Ordenes Realizadas</h3>
                         <ul class="nav nav-pills ml-auto p-2">
-                            <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Pendientes</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Aprobadas</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Cobradas</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Rechazados</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#tab_Pendientes" data-toggle="tab">Pendientes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_Aprobadas" data-toggle="tab">Aprobadas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_Cobradas" data-toggle="tab">Cobradas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_Rechazadas" data-toggle="tab">Rechazados</a></li>
                         </ul>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1">
+                            <div class="tab-pane active" id="tab_Pendientes">
                                 <div *ngIf="!listOrdenesPendientes.length">
                                     <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Pendientes...</h3>
                                 </div>
@@ -156,7 +156,7 @@
                                 </div>
 
                             </div>
-                            <div class="tab-pane" id="tab_2">
+                            <div class="tab-pane" id="tab_Aprobadas">
                                 <div *ngIf="!listOrdenesAprobadas.length">
                                     <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Aprobadas...</h3>
                                 </div>
@@ -197,12 +197,12 @@
                                                     <i class="fas fa-money-bill-wave"></i> Monto Total a Cobrar
                                                 </li>
                                             </ul>
-                                            <button class="btn btn-xs btn-block btn-outline-danger"><i class="fa fa-money-bill-wave"></i> Cobrar</button>
+                                            <button class="btn btn-xs btn-block btn-outline-danger" (click)="Cobrar(itemPadre)"><i class="fa fa-money-bill-wave"></i> Cobrar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tab_3">
+                            <div class="tab-pane" id="tab_Cobradas">
                                 <div *ngIf="!listOrdenesCobradas.length">
                                     <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Aprobadas...</h3>
                                 </div>
@@ -247,7 +247,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tab_4">
+                            <div class="tab-pane" id="tab_Rechazadas">
                                 <div *ngIf="!listOrdenesRechazadas.length">
                                     <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Rechazados...</h3>
                                 </div>

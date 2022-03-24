@@ -95,46 +95,55 @@
                                 <div *ngIf="!listCarrito.length">
                                     <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;"><i class="fa fa-cart-plus"></i> Sus productos comprados se visualizaran en este lugar...</h3>
                                 </div>
-                                <div class="row" *ngIf="listCarrito.length" style="display: flex;">
-                                    <div *ngFor="let item of listCarrito;let i=index" class="col-xl-4 col-sm-6 col-lg-4 col-12">
-                                        <div class="cardCarCustom  border-danger mb-3">
-                                            <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
-                                                <h6 style="margin-bottom:4px;">{{item.nombre}}</h6>
-                                            </div>
-                                            <hr style="margin: 0;padding: 0;">
-                                            <img src="{{item.direccionFoto}}" height="90px" width="90px" class="logo mt-1" alt="Logo">
-                                            <ul class="list-group list-group-flush mt-2">
-                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
-                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.cantidad}}</span>
-                                                    <i class="fa fa-asterisk"></i> Cantidad
-                                                </li>
-                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
-                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.subTotal}} Bs</span>
-                                                    <i class="fa fa-asterisk"></i> Sub-Total
-                                                </li>
-                                            </ul>
-                                            <div class="footer mt-2 mb-2">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <button type="button" (click)="agregarCarrito(item,i)" class="btn btn-block btn-outline-warning btn-xs">
-                                                                <i class="fa fa-plus"></i> </button>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <button type="button" (click)="quitar(i)" class="btn btn-block btn-outline-danger btn-xs">
-                                                                <i class="fa fa-minus"></i> 
-                                                            </button>
+                                <div *ngIf="listCarrito.length">
+                                    <h3 style="text-align: center;">Monto total a pagar: {{montoTotalPagar}} Bs</h3>
+                                    <div class="row" style="display: flex;">
+                                        <div *ngFor="let item of listCarrito;let i=index" class="col-xl-4 col-sm-6 col-lg-4 col-12">
+                                            <div class="cardCarCustom  border-danger mb-3">
+                                                <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
+                                                    <h6 style="margin-bottom:4px;">{{item.nombre}}</h6>
+                                                </div>
+                                                <hr style="margin: 0;padding: 0;">
+                                                <img src="{{item.direccionFoto}}" height="90px" width="90px" class="logo mt-1" alt="Logo">
+                                                <ul class="list-group list-group-flush mt-2">
+                                                    <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                        <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.cantidad}}</span>
+                                                        <i class="fa fa-asterisk"></i> Cantidad
+                                                    </li>
+                                                    <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                        <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.subTotal}} Bs</span>
+                                                        <i class="fa fa-asterisk"></i> Sub-Total
+                                                    </li>
+                                                </ul>
+                                                <div class="footer mt-2 mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <button type="button" (click)="agregarCarrito(item,i)" class="btn btn-block btn-outline-warning btn-xs">
+                                                                    <i class="fa fa-plus"></i> </button>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <button type="button" (click)="quitar(i)" class="btn btn-block btn-outline-danger btn-xs">
+                                                                    <i class="fa fa-minus"></i> 
+                                                                </button>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <button type="button" (click)="eliminar(i)" class="btn btn-block btn-outline-danger btn-xs">
+                                                        <i class="fa fa-trash-alt"></i> Eliminar Producto
+                                                    </button>
                                             </div>
-                                            <button type="button" (click)="eliminar(i)" class="btn btn-block btn-outline-danger btn-xs">
-                                                    <i class="fa fa-trash-alt"></i> Eliminar Producto
-                                                </button>
                                         </div>
                                     </div>
-                                    <button class="btn btn-outline-danger btn-block btn-sm" (click)="Ordenar()"><i class="fa fa-money-bill-wave"></i> Ordenar</button>
 
+                                    <div class="row">
+                                        <div class="col">
+                                            <button class="btn btn-outline-danger btn-block btn-sm" (click)="Ordenar()"><i class="fa fa-money-bill-wave"></i> Ordenar sin pagar</button>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-outline-danger btn-block btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-money-bill-wave"></i> Ordenar y Pagar</button>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
                             <div class="tab-pane" id="tab_1">
                                 <div *ngIf="!listEstadoProductos.length">
@@ -142,33 +151,45 @@
                                 </div>
                                 <div class="scrollProduct">
                                     <div class="row" style="display: flex;">
-                                        <div *ngFor="let item of listEstadoProductos;let i=index" class="col-xl-4 col-sm-6 col-lg-4 col-12">
+                                        <div *ngFor="let item of listEstadoProductos;let i=index" class="col-xl-6 col-sm-6 col-lg-4 col-12">
                                             <div class="cardCarCustom  border-danger mb-3">
                                                 <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
-                                                    <h6 style="margin-bottom:4px;">{{item.nombreProducto}}</h6>
+                                                    <h6 style="margin-bottom:4px;">{{item.nombreSucursal}}</h6>
                                                 </div>
                                                 <hr style="margin: 0;padding: 0;">
-                                                <img src="{{item.direccionFoto}}" height="90px" width="90px" class="logo mt-1" alt="Logo">
+                                                <!-- <img src="{{item.direccionFoto}}" height="90px" width="90px" class="logo mt-1" alt="Logo"> -->
                                                 <ul class="list-group list-group-flush mt-2">
                                                     <li class="list-group-item" style="padding:0.2rem;font-size:12px">
-                                                        <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.numeroPedido}}</span> Nº pedido
-                                                    </li>
-                                                    <li class="list-group-item" style="padding:0.2rem;font-size:12px">
-                                                        <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.nombreSucursal}}</span> Sucursal
-                                                    </li>
-                                                    <li class="list-group-item" style="padding:0.2rem;font-size:12px">
-                                                        <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.cantidad}}</span> Cantidad
-                                                    </li>
-                                                    <li class="list-group-item" style="padding:0.2rem;font-size:12px">
-                                                        <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.subTotal}} Bs</span> Sub-Total
-                                                    </li>
-                                                    <li class="list-group-item" style="padding:0.2rem;font-size:12px">
                                                         <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.fecha | date:'dd/MM/YYYY hh:mm:ss'}}</span> Fecha
+                                                    </li>
+                                                    <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                        <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.numeroPedido}}</span> Numero Pedido
+                                                    </li>
+                                                </ul>
+                                                <div class="row mt-2">
+                                                    <div class="col-12">
+
+                                                        <div *ngFor="let itemHijo of item.detalleProducto" class="info-box bg-light">
+                                                            <div class="info-box-content">
+                                                                <span class="info-box-number text-center text-muted mb-0">{{itemHijo.nombreProducto}}</span>
+                                                                <hr style="margin: 0;padding: 0;">
+                                                                <span class="info-box-text text-muted">Cantida: {{itemHijo.cantidad}}</span>
+                                                                <span class="info-box-text text-muted">Sub Total: {{itemHijo.subTotal}} (Bs.)</span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item" style="padding:0.2rem;font-size:12px">
+                                                        <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.montoTotal}} (Bs.)</span> Monto Total
                                                     </li>
                                                     <li class="list-group-item" style="padding:0.2rem;font-size:12px">
                                                         <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{item.estado}}</span> Estado
                                                     </li>
                                                 </ul>
+
+                                                <button type="button" *ngIf="item.detallePago" (click)="VerDetallePago(item.detallePago)" data-toggle="modal" data-target="#modal-view" class="btn btn-block btn-outline-danger btn-xs mt-1"><i class="fas fa-arrow-circle-right"></i> Ver Detalle Pago </button>
                                             </div>
                                         </div>
                                     </div>
@@ -188,3 +209,77 @@
     <!--/. container-fluid -->
 </section>
 <!-- /.content -->
+
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-money-bill-wave"></i> Formulario Pago</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="Form">
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Nombre Banco</label>
+                        <input type="text" formControlName="nombreBanco" class="form-control" placeholder="Nombre Banco">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Numero de Transferencia</label>
+                        <input type="number" formControlName="numeroTransferencia" class="form-control" placeholder="Numero de Transferencia">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Monto</label>
+                        <input type="number" formControlName="monto" class="form-control" placeholder="Monto">
+                    </div>
+                    <div *ngIf="previsualizacion" style="background-color: aqua;text-align: center;">
+                        <img src="{{previsualizacion}}" height="200px" alt="">
+                    </div>
+                    <input type="file" (change)="file($event)" class="form-control">
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+                <button type="button" (click)="OrdenarConTranferencia()" [disabled]="!Form.valid" class="btn btn-outline-danger btn-sm"><i class="fa fa-money-bill-wave"></i> Realizar Orden</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-view">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-money-bill-wave"></i> Detalle Formulario Pago</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Nombre Banco</label>
+                    <input type="text" disabled [(ngModel)]="view.nombreBanco" class="form-control" placeholder="Nombre Banco">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Numero de Transferencia</label>
+                    <input type="text" disabled [(ngModel)]="view.numeroTranferencia" class="form-control" placeholder="Numero de Transferencia">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Monto</label>
+                    <input type="number" disabled [(ngModel)]="view.monto" class="form-control" placeholder="Monto">
+                </div>
+                <img src="{{view.direccionFoto}}" height="200px" alt="">
+                <!-- <div *ngIf="previsualizacion" style="background-color: aqua;text-align: center;">
+                    <img src="{{previsualizacionView}}" height="200px" alt="">
+                </div> -->
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

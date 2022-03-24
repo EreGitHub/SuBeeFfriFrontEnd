@@ -113,13 +113,13 @@
                             </a>
                             <ul class="nav nav-treeview" style="display: none;">
                                 <li class="nav-item">
-                                    <a (click)="ListarReporte1()" data-toggle="modal" data-target="#modal-Reporte1" class="nav-link">
+                                    <a data-toggle="modal" data-target="#modal-Reporte1" class="nav-link">
                                         <i class="far fa-file-alt nav-icon"></i>
                                         <p>Reporte 1</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a (click)="ListarReporte2()" data-toggle="modal" data-target="#modal-Reporte2" class="nav-link">
+                                    <a data-toggle="modal" data-target="#modal-Reporte2" class="nav-link">
                                         <i class="far fa-file-alt nav-icon"></i>
                                         <p>Reporte 2</p>
                                     </a>
@@ -178,7 +178,6 @@
 <div class="modal fade" id="modal-Reporte1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h4 class="modal-title"><i class="far fa-file-alt nav-icon"></i> SUCURSAL QUE TIENE MAS PEDIDOS</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -189,8 +188,18 @@
                 <span style="font-weight: bold;">Nombre Sucursal: &nbsp;&nbsp;&nbsp;{{objReporte1.nombreSucursal}}</span>
                 <br>
                 <span style="font-weight: bold;">Direccion Sucursal:&nbsp;{{objReporte1.direccion}}</span>
-
-                <div class="card card-danger card-outline mt-2">
+                <div class="row">
+                    <div class="col">
+                        <label>Fecha Inicio</label>
+                        <input type="date" class="form-control" [(ngModel)]="NgModelReporte1.fechaInicio" placeholder="Fecha Inicio">
+                    </div>
+                    <div class="col">
+                        <label>Fecha Fin</label>
+                        <input type="date" class="form-control" [(ngModel)]="NgModelReporte1.fechaFin" placeholder="Fecha Fin">
+                    </div>
+                </div>
+                <button class="btn btn-block btn-outline-danger btn-sm mt-3" (click)="ListarReporte1()">Procesar Reporte</button>
+                <div class="card card-danger card-outline mt-2" *ngIf="Report1">
                     <div class="card-header">
                         <h3 class="card-title">Productos Solicitados</h3>
 
@@ -229,7 +238,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-ban"></i> Cerrar</button>
-                <button type="button" (click)="generarReporte1()" class="btn btn-outline-danger btn-sm"><i class="far fa-file-alt nav-icon"></i> Generar Reporte</button>
+                <button type="button" (click)="generarReporte1()" [disabled]="!Report1" class="btn btn-outline-danger btn-sm"><i class="far fa-file-alt nav-icon"></i> Generar Reporte</button>
             </div>
         </div>
     </div>
@@ -249,8 +258,18 @@
                 <span style="font-weight: bold;">Reporte perteneciente al mes de: &nbsp;{{objReporte2.mes}}</span>
                 <br>
                 <span style="font-weight: bold;">Monto Total Generado:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{objReporte2.montoTotal}} (Bs.)</span>
-
-                <div class="card card-danger card-outline mt-2">
+                <div class="row">
+                    <div class="col">
+                        <label>Fecha Inicio</label>
+                        <input type="date" class="form-control" [(ngModel)]="NgModelReporte2.fechaInicio" placeholder="Fecha Inicio">
+                    </div>
+                    <div class="col">
+                        <label>Fecha Fin</label>
+                        <input type="date" class="form-control" [(ngModel)]="NgModelReporte2.fechaFin" placeholder="Fecha Fin">
+                    </div>
+                </div>
+                <button class="btn btn-block btn-outline-danger btn-sm mt-3" (click)="ListarReporte2()">Procesar Reporte</button>
+                <div class="card card-danger card-outline mt-2" *ngIf="Report2">
                     <div class="card-header">
                         <h3 class="card-title">Lista de productos por cantidad </h3>
 

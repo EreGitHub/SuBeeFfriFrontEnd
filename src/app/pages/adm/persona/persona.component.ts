@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { ServerService } from 'src/app/services/server.service';
+import { UtilitiesService } from 'src/app/services/utilities.service';
 
 @Component({
   selector: 'app-persona',
@@ -25,7 +25,7 @@ export class PersonaComponent implements OnInit {
   constructor(
     private server: ServerService,
     private toastr: ToastrService,
-    private sanitizer: DomSanitizer) { }
+    private utilities: UtilitiesService) { }
 
   ngOnInit(): void {
     this.All();
@@ -76,9 +76,23 @@ export class PersonaComponent implements OnInit {
       return;
     }
     try {
+      const Nombre = this.Form.get('nombres')?.value;
+      const Apellidos = this.Form.get('apellidos')?.value;
+      if (this.utilities.ValidarLetras(Nombre)) {
+        this.toastr.error('El nombre solo puede contener letras', 'Error');
+        return;
+      }
+      if (this.utilities.ValidarLetras(Apellidos)) {
+        this.toastr.error('El apellido solo puede contener letras', 'Error');
+        return;
+      }      
+      if (this.archivo === undefined) {
+        this.toastr.error('Es obligatorio adjuntar una imagen', 'Error');
+        return;
+      }
       const request = new FormData();
-      request.append('nombres', this.Form.get('nombres')?.value);
-      request.append('apellidos', this.Form.get('apellidos')?.value);
+      request.append('nombres', Nombre);
+      request.append('apellidos', Apellidos);
       request.append('ci', this.Form.get('ci')?.value);
       request.append('direccion', this.Form.get('direccion')?.value);
       request.append('Archivo', this.archivo);

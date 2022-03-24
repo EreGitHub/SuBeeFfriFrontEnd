@@ -4,6 +4,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { ServerService } from 'src/app/services/server.service';
+import { UtilitiesService } from 'src/app/services/utilities.service';
 
 @Component({
   selector: 'app-proveedor',
@@ -26,7 +27,8 @@ export class ProveedorComponent implements AfterViewInit, OnInit {
   });
   constructor(
     private server: ServerService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService,
+    private utilities: UtilitiesService) { }
 
   async ngOnInit() {
     this.dtOptions = {
@@ -60,9 +62,15 @@ export class ProveedorComponent implements AfterViewInit, OnInit {
   async save() {
     if (!this.Form.valid) {
       return;
-    }
+    }    
     try {
+      const Nombre = this.Form.get('nombre')?.value;
+      if (this.utilities.ValidarLetras(Nombre)) {
+        this.toastr.error('El nombre no puede contener números');
+        return;
+      }
       const id = this.Form.get('idProveedor')?.value === null ? 0 : this.Form.get('idProveedor')?.value;
+      this.Form.get('nit')?.setValue(this.Form.get('nit')?.value.toString());
       if (id === 0) {
         this.Form.get('idProveedor')?.setValue(id);
         await this.server.post('/Proveedor', this.Form.value) as any;

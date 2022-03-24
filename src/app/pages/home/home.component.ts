@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Cell, Columns, Img, Ol, PdfMakeWrapper, Stack, Table, TocItem, Txt } from 'pdfmake-wrapper';
 import { ITable, IText, ITocItem } from 'pdfmake-wrapper/lib/interfaces';
 import { ServerService } from 'src/app/services/server.service';
@@ -16,7 +17,15 @@ export class HomeComponent implements OnInit {
   NombreUsuario: string = '';
   objReporte1: any = {};
   objReporte2: any = {};
-  constructor(private router: Router, private http: HttpClient, private server: ServerService) { }
+  Report1: boolean = false;
+  NgModelReporte1: any = {};
+  Report2: boolean = false;
+  NgModelReporte2: any = {};
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private server: ServerService,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     const usurioLocal = localStorage.getItem('usuario') as any;
@@ -31,15 +40,26 @@ export class HomeComponent implements OnInit {
   }
 
   async ListarReporte1() {
-    this.objReporte1 = await this.server.get('/Reporte');
+    const fechaInicio = this.NgModelReporte1.fechaInicio;
+    const fechaFin = this.NgModelReporte1.fechaFin;
+    if (fechaInicio === undefined || fechaFin === undefined) {
+      this.toastr.error('Debe ingresar una fecha de inicio y una fecha de fin');
+      return;
+    }
+    this.objReporte1 = await this.server.get(`/Reporte/Reporte1?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    this.Report1 = true;
     console.log(this.objReporte1);
   }
   async ListarReporte2() {
-    const fecha = new Date();
-    const hoy = fecha.getDate();
-    const mesActual = fecha.getMonth() + 1;
-    const data: any = await this.server.get('/Reporte/' + mesActual);
+    const fechaInicio = this.NgModelReporte2.fechaInicio;
+    const fechaFin = this.NgModelReporte2.fechaFin;
+    if (fechaInicio === undefined || fechaFin === undefined) {
+      this.toastr.error('Debe ingresar una fecha de inicio y una fecha de fin');
+      return;
+    }    
+    const data: any = await this.server.get(`/Reporte/Reporte2?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
     this.objReporte2 = data;
+    this.Report2 = true;
     console.log(this.objReporte2);
   }
 

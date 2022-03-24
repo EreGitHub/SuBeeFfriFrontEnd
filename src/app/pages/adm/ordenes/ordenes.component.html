@@ -24,7 +24,7 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box">
                     <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-money-bill-wave"></i></span>
                     <div class="info-box-content">
@@ -36,12 +36,12 @@
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Ventas Aprobadas</span>
+                        <span class="info-box-text">Enviadas</span>
                         <span class="info-box-number">{{totalVentasAprobadas}}</span>
                     </div>
                     <!-- /.info-box-content -->
@@ -52,21 +52,8 @@
 
             <!-- fix for small devices only -->
             <div class="clearfix hidden-md-up"></div>
-
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-down"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Ventas Rechazadas</span>
-                        <span class="info-box-number">{{totalVentasRechazadas}}</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
@@ -88,10 +75,9 @@
                     <div class="card-header d-flex p-0">
                         <h3 class="card-title p-3">Ordenes Realizadas</h3>
                         <ul class="nav nav-pills ml-auto p-2">
-                            <li class="nav-item"><a class="nav-link active" href="#tab_Pendientes" data-toggle="tab">Pendientes</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab_Aprobadas" data-toggle="tab">Aprobadas</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#tab_Pendientes" data-toggle="tab">Pedidos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_Aprobadas" data-toggle="tab">Enviadas</a></li>
                             <li class="nav-item"><a class="nav-link" href="#tab_Cobradas" data-toggle="tab">Cobradas</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab_Rechazadas" data-toggle="tab">Rechazados</a></li>
                         </ul>
                     </div>
                     <!-- /.card-header -->
@@ -139,18 +125,8 @@
                                                     <i class="fas fa-money-bill-wave"></i> Monto Total a Cobrar
                                                 </li>
                                             </ul>
-                                            <div class="row mt-2">
-                                                <div class="col-6">
-                                                    <button type="button" (click)="Aprobar(itemPadre.idPedido)" class="btn btn-block btn-outline-warning btn-xs">
-                                                            <i class="fas fa-thumbs-up"></i>
-                                                        </button>
-                                                </div>
-                                                <div class="col-6">
-                                                    <button type="button" (click)="Rechazar(itemPadre.idPedido)" class="btn btn-block btn-outline-danger btn-xs">
-                                                            <i class="fas fa-thumbs-down"></i>
-                                                        </button>
-                                                </div>
-                                            </div>
+                                            <button type="button" (click)="Enviar(itemPadre)" class="btn btn-block btn-outline-warning btn-xs"><i class="fas fa-thumbs-up"></i></button>
+                                            <button type="button" *ngIf="itemPadre.detallePago" data-toggle="modal" data-target="#modal-view" (click)="VerDetallePago(itemPadre.detallePago)" class="btn btn-block btn-outline-danger btn-xs"><i class="fa fa-money-bill-wave"></i> Ver Detalle Pago</button>
                                         </div>
                                     </div>
                                 </div>
@@ -197,7 +173,8 @@
                                                     <i class="fas fa-money-bill-wave"></i> Monto Total a Cobrar
                                                 </li>
                                             </ul>
-                                            <button class="btn btn-xs btn-block btn-outline-danger" (click)="Cobrar(itemPadre)"><i class="fa fa-money-bill-wave"></i> Cobrar</button>
+                                            <button *ngIf="!itemPadre.detallePago" class="btn btn-xs btn-block btn-outline-danger" (click)="Cobrar(itemPadre)"><i class="fa fa-money-bill-wave"></i> Cobrar</button>
+                                            <button type="button" *ngIf="itemPadre.detallePago" data-toggle="modal" data-target="#modal-view" (click)="VerDetallePago(itemPadre.detallePago)" class="btn btn-block btn-outline-danger btn-xs"><i class="fa fa-money-bill-wave"></i> Ver Detalle Pago</button>
                                         </div>
                                     </div>
                                 </div>
@@ -243,43 +220,7 @@
                                                     <i class="fas fa-money-bill-wave"></i> Monto Total Cobrado
                                                 </li>
                                             </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tab_Rechazadas">
-                                <div *ngIf="!listOrdenesRechazadas.length">
-                                    <h3 style="color: #78838e;margin-top: 115px;margin-bottom: 115px;text-align: center;">Lista de Productos Rechazados...</h3>
-                                </div>
-                                <div class="row" style="display: flex;">
-                                    <div *ngFor="let itemPadre of listOrdenesRechazadas;" class="col-xl-3 col-sm-3 col-lg-3 col-12">
-                                        <div class="cardCarCustom  border-danger mb-3">
-                                            <div class="card-body" style="padding:0px;text-align:center;width: 100%;">
-                                                <h6 style="margin-bottom:4px;">{{itemPadre.nombrePersona}}</h6>
-                                            </div>
-                                            <hr style="margin: 0;padding: 0;">
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
-                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.fecha | date:'dd/MM/YYYY hh:mm:ss'}}</span> Fecha
-                                                </li>
-                                                <li class="list-group-item" style="padding:0.2rem;font-size:12px">
-                                                    <span style="padding:3px;font-size:11px" class="badge badge-pill bg-danger float-right">{{itemPadre.nroPedido}}</span> Nº Orden
-                                                </li>
-                                            </ul>
-                                            <div class="row mt-2">
-                                                <div class="col-12">
-
-                                                    <div *ngFor="let itemHijo of itemPadre.productos" class="info-box bg-light">
-                                                        <div class="info-box-content">
-                                                            <span class="info-box-number text-center text-muted mb-0">{{itemHijo.nombreProducto}}</span>
-                                                            <hr style="margin: 0;padding: 0;">
-                                                            <span class="info-box-text text-muted">Cantida: {{itemHijo.cantidad}}</span>
-                                                            <span class="info-box-text text-muted">Sub Total: {{itemHijo.subTotal}} (Bs.)</span>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
+                                            <button type="button" *ngIf="itemPadre.detallePago" data-toggle="modal" data-target="#modal-view" (click)="VerDetallePago(itemPadre.detallePago)" class="btn btn-block btn-outline-danger btn-xs"><i class="fa fa-money-bill-wave"></i> Ver Detalle Pago</button>
                                         </div>
                                     </div>
                                 </div>
@@ -294,9 +235,40 @@
             <!-- /.col -->
         </div>
 
-
-
     </div>
     <!--/. container-fluid -->
 </section>
 <!-- /.content -->
+
+
+<div class="modal fade" id="modal-view">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-money-bill-wave"></i> Detalle Formulario Pago</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Nombre Banco</label>
+                    <input type="text" disabled [(ngModel)]="view.nombreBanco" class="form-control" placeholder="Nombre Banco">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Numero de Transferencia</label>
+                    <input type="text" disabled [(ngModel)]="view.numeroTranferencia" class="form-control" placeholder="Numero de Transferencia">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Monto</label>
+                    <input type="number" disabled [(ngModel)]="view.monto" class="form-control" placeholder="Monto">
+                </div>
+                <img src="{{view.direccionFoto}}" height="200px" alt="">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

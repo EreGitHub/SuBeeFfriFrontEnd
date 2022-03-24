@@ -16,9 +16,9 @@ export class OrdenesComponent implements OnInit {
   totalVentasRechazadas: number = 0;
   totalPedidos: number = 0;
   listOrdenesPendientes: Array<any> = [];
-  listOrdenesAprobadas: Array<any> = [];
-  listOrdenesRechazadas: Array<any> = [];
+  listOrdenesAprobadas: Array<any> = [];  
   listOrdenesCobradas: Array<any> = [];
+  view: any = {};
   constructor(
     private server: ServerService,
     private toastr: ToastrService) { }
@@ -50,37 +50,34 @@ export class OrdenesComponent implements OnInit {
 
   async Listar() {
     const lst = await this.server.get('/OrdenPedido/ListarOrdenes') as any;
-
     this.listOrdenesPendientes = [];
-    this.listOrdenesAprobadas = [];
-    this.listOrdenesRechazadas = [];
+    this.listOrdenesAprobadas = [];    
 
     this.totalPedidos = lst.length;
-    this.listOrdenesPendientes = lst.filter((row: any) => row.estadoOrden == 'Pendiente');
-    this.listOrdenesAprobadas = lst.filter((row: any) => row.estadoOrden == 'Aprobado');
-    this.totalVentasAprobadas = this.listOrdenesAprobadas.length;
-    this.listOrdenesRechazadas = lst.filter((row: any) => row.estadoOrden == 'Rechazado');
-    this.listOrdenesCobradas = lst.filter((row: any) => row.estadoOrden == 'Cobrado');
+    this.listOrdenesPendientes = lst.filter((row: any) => row.estadoOrden == 'Pedido');
+    console.log(this.listOrdenesPendientes);
+    this.listOrdenesAprobadas = lst.filter((row: any) => row.estadoOrden == 'Enviado');
+    this.totalVentasAprobadas = this.listOrdenesAprobadas.length;    
+    this.listOrdenesCobradas = lst.filter((row: any) => row.estadoOrden == 'Cobradas');
     this.totalMonto = 0;
     this.listOrdenesCobradas.forEach((row: any) => {
       this.totalMonto += row.montoTotal;
-    });
-    this.totalVentasRechazadas = this.listOrdenesRechazadas.length;
+    });    
   }
 
-  async Rechazar(idPedido: any) {
-    try {
-      await this.server.post('/OrdenPedido/Rechazar/' + idPedido, {})
-      this.toastr.success('Orden rechazada correctamente', 'Exitoso');
-      await this.Listar();
-    } catch (error: any) {
-      this.toastr.error(error.error);
-    }
+  async VerDetallePago(detallePago: any) {
+    this.view = detallePago;
   }
 
-  async Aprobar(idPedido: any) {
-    try {
-      await this.server.post('/OrdenPedido/Aprobar/' + idPedido, {})
+  async Enviar(pedido: any) {
+    debugger
+    try {      
+      const oUser = localStorage.getItem('usuario') as any;
+      const oUserJson = JSON.parse(oUser);
+      if (pedido.detallePago === null)
+        await this.server.post('/OrdenPedido/Enviar/' + pedido.idPedido, {})
+      else
+        await this.server.post(`/OrdenPedido/EnviarOrdenPagada?idPedido=${pedido.idPedido}&idUsuarioCobrador=${oUserJson.idUsuario}`, {});
       this.toastr.success('Orden aprobada correctamente', 'Exitoso');
       await this.Listar();
     } catch (error: any) {

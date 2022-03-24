@@ -207,8 +207,7 @@ export class PedidosComponent implements OnInit {
       const orden = {
         idUsuario: user.idUsuario,
         detallePedidos: this.listCarrito
-      };
-      debugger
+      };      
       const result = await this.server.post('/OrdenPedido/OrdenConPago', orden) as any
 
       const request = new FormData();

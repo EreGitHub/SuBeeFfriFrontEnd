@@ -85,7 +85,7 @@ export class PersonaComponent implements OnInit {
       if (this.utilities.ValidarLetras(Apellidos)) {
         this.toastr.error('El apellido solo puede contener letras', 'Error');
         return;
-      }      
+      }
       if (this.archivo === undefined) {
         this.toastr.error('Es obligatorio adjuntar una imagen', 'Error');
         return;
@@ -107,9 +107,10 @@ export class PersonaComponent implements OnInit {
       this.toastr.success('El registro se guardo exitosamente', 'Éxito');
       document.getElementById('modal-default')?.click();
       this.All();
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      this.toastr.error('Ocurrio un error al guardar el registro', 'Error');
+      this.toastr.error(error.error, 'Error');
+
     }
 
   }
